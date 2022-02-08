@@ -1,9 +1,8 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
-import userEvent from '@testing-library/user-event';
-
 
 describe('Teste o componente <Pokemon.js />', () => {
   it('O nome correto do Pokémon deve ser mostrado na tela', () => {
@@ -16,7 +15,7 @@ describe('Teste o componente <Pokemon.js />', () => {
 
   it('O tipo correto do pokémon deve ser mostrado na tela.', () => {
     renderWithRouter(<App />);
-    
+
     const pokemonType = screen.getByTestId('pokemon-type');
 
     expect(pokemonType).toHaveTextContent('Electric');
@@ -24,7 +23,7 @@ describe('Teste o componente <Pokemon.js />', () => {
 
   it('O peso correto do pokémon deve ser mostrado na tela.', () => {
     renderWithRouter(<App />);
-    
+
     const pokemonWeight = screen.getByTestId('pokemon-weight');
 
     expect(pokemonWeight).toHaveTextContent('Average weight:');
@@ -39,36 +38,36 @@ describe('Teste o componente <Pokemon.js />', () => {
     expect(pokemonImage).toHaveAttribute('src', 'https://cdn2.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png');
   });
 
-  it('Teste se o card do Pokémon indicado na Pokédex contém um link de navegação para exibir detalhes deste Pokémon.', () => {
+  it('Teste se o card do Pokémon contém um link de navegação mais detalhes', () => {
     renderWithRouter(<App />);
 
-    const link = screen.getByRole('link', { name: 'More details' });
+    const link = screen.getByRole('link', { name: /More details/ });
 
     expect(link).toHaveAttribute('href', '/pokemons/25');
   });
 
-  it('Teste se ao clicar no link de navegação do Pokémon, é feito o redirecionamento', () => {
+  it('Teste se ao clicar no link de navegação do Pokémon, é redirecionado', () => {
     const { history } = renderWithRouter(<App />);
 
-    const link = screen.getByRole('link', { name: 'More details' });
-    userEvent.click(link)
+    const link = screen.getByRole('link', { name: /More details/ });
+    userEvent.click(link);
 
-    const { location: { pathname } } = history
+    const { location: { pathname } } = history;
 
-    expect(pathname).toBe('/pokemons/25')
-  })
+    expect(pathname).toBe('/pokemons/25');
+  });
 
   it('Teste se existe um ícone de estrela nos Pokémons favoritados.', () => {
     renderWithRouter(<App />);
 
-    const link = screen.getByRole('link', { name: 'More details' });
-    userEvent.click(link)
+    const link = screen.getByRole('link', { name: /More details/ });
+    userEvent.click(link);
 
     const favorite = screen.getByRole('checkbox', { name: /favoritado/ });
     userEvent.click(favorite);
 
-    const favoriteAlt = screen.getByAltText('Pikachu is marked as favorite')
+    const favoriteAlt = screen.getByAltText('Pikachu is marked as favorite');
 
-    expect(favoriteAlt).toHaveAttribute('src', '/star-icon.svg')
-  })
+    expect(favoriteAlt).toHaveAttribute('src', '/star-icon.svg');
+  });
 });
