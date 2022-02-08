@@ -40,6 +40,25 @@ describe('Teste o componente <Pokedex.js />', () => {
     expect(pokemon).toHaveLength(1);
   });
 
+  it('O primeiro Pokémon deve ser mostrado, se estiver no último da lista', () => {
+    renderWithRouter(<App />);
+
+    const nextButton = screen.getByRole('button', { name: 'Próximo pokémon' });
+
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+    userEvent.click(nextButton);
+
+    const pikachuImg = screen.getByAltText(/pikachu sprite/i);
+    expect(pikachuImg).toBeInTheDocument();
+  });
+
   it('Teste se a Pokédex tem os botões de filtro.', () => {
     renderWithRouter(<App />);
 
@@ -62,7 +81,7 @@ describe('Teste o componente <Pokedex.js />', () => {
     renderWithRouter(<App />);
 
     const resetButton = screen.getByRole('button', {
-      name: 'All',
+      name: /All/i,
     });
     expect(resetButton).toBeInTheDocument();
   });
