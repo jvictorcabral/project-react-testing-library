@@ -93,15 +93,15 @@ describe('Teste o componente <Pokedex.js />', () => {
     expect(resetButton).toBeInTheDocument();
   });
 
-  it('A Pokedéx deverá mostrar os Pokémons normalmente quando o botão All for clicado', () => {
+  it('A Pokedéx deve mostrar todos os Pokémons quando clicar no botão All', () => {
     renderWithRouter(<App />);
 
     const resetButton = screen.getByRole('button', {
       name: /All/i,
     });
-    userEvent.click(resetButton)
+    userEvent.click(resetButton);
 
-    const pokemon = screen.getByText(/Pikachu/i)
+    const pokemon = screen.getByText(/Pikachu/i);
     expect(pokemon).toBeInTheDocument();
 
     expect(resetButton).toBeInTheDocument();
