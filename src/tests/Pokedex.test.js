@@ -32,14 +32,6 @@ describe('Teste o componente <Pokedex.js />', () => {
     userEvent.click(nextButton);
   });
 
-  it('Teste se é mostrado apenas um Pokémon por vez.', () => {
-    renderWithRouter(<App />);
-
-    const pokemon = screen.getAllByText(/Average weight/i);
-
-    expect(pokemon).toHaveLength(1);
-  });
-
   it('O primeiro Pokémon deve ser mostrado, se estiver no último da lista', () => {
     renderWithRouter(<App />);
 
@@ -59,6 +51,14 @@ describe('Teste o componente <Pokedex.js />', () => {
     expect(pikachuImg).toBeInTheDocument();
   });
 
+  it('Teste se é mostrado apenas um Pokémon por vez.', () => {
+    renderWithRouter(<App />);
+
+    const pokemon = screen.getAllByText(/Average weight/i);
+
+    expect(pokemon).toHaveLength(1);
+  });
+
   it('Teste se a Pokédex tem os botões de filtro.', () => {
     renderWithRouter(<App />);
 
@@ -67,14 +67,21 @@ describe('Teste o componente <Pokedex.js />', () => {
     expect(filterButton).toHaveLength(SEVEN);
   });
 
-  it('Quando selecionado um tipo, deve circular somente pokémons daquele tipo', () => {
+  it('deve existir um botão para cada tipo', () => {
     renderWithRouter(<App />);
+    const pokemonTypes = screen.getAllByTestId('pokemon-type-button');
+    expect(pokemonTypes[0]).toHaveTextContent('Electric');
+    expect(pokemonTypes[1]).toHaveTextContent('Fire');
+    expect(pokemonTypes[2]).toHaveTextContent('Bug');
+    expect(pokemonTypes[3]).toHaveTextContent('Poison');
+    expect(pokemonTypes[4]).toHaveTextContent('Psychic');
+    expect(pokemonTypes[5]).toHaveTextContent('Normal');
+    expect(pokemonTypes[6]).toHaveTextContent('Dragon');
+    expect(pokemonTypes[0]).toBeInTheDocument();
+    userEvent.click(pokemonTypes[4]);
 
-    const fireType = screen.getByRole('button', { name: /fire/i });
-    userEvent.click(fireType);
-
-    const firePokemons = screen.getAllByText(/fire/i);
-    expect(firePokemons).toHaveLength(2);
+    const psychicPokemons = screen.getByText(/Alakazam/i);
+    expect(psychicPokemons).toBeInTheDocument();
   });
 
   it('Teste se a Pokédex contém um botão para resetar o filtro', () => {
@@ -83,6 +90,20 @@ describe('Teste o componente <Pokedex.js />', () => {
     const resetButton = screen.getByRole('button', {
       name: /All/i,
     });
+    expect(resetButton).toBeInTheDocument();
+  });
+
+  it('A Pokedéx deverá mostrar os Pokémons normalmente quando o botão All for clicado', () => {
+    renderWithRouter(<App />);
+
+    const resetButton = screen.getByRole('button', {
+      name: /All/i,
+    });
+    userEvent.click(resetButton)
+
+    const pokemon = screen.getByText(/Pikachu/i)
+    expect(pokemon).toBeInTheDocument();
+
     expect(resetButton).toBeInTheDocument();
   });
 });
